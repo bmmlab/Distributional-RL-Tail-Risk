@@ -1,0 +1,24 @@
+# ignore data file
+outlier_project/results/
+outlier_project/test/
+outlier_project/simulation_data/
+results/
+
+# ignore DS_Store
+.DS_Store
+
+# ignore pyc
+*.pyc
+
+# ignore .idea files
+.idea/
+
+# ignore all Jupyter checkpoints
+.ipynb_checkpoints/
+
+__pycache__/
+
+
+# ignore .txt files
+*.txt
+*.xml
