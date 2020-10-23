@@ -44,7 +44,6 @@ class LeptokurticEnv(gym.Env):
     def __init__(self):
         self.action_space = spaces.Discrete(2)  # two actions
         self.observation_space = spaces.Discrete(2)  # two states
-        self.state_transition_prob = 0.7  # state transition probability
         self.reward_distribution_type = None
         self.reward_distribution = None  # reward distribution
         self.cum_reward = 0.0
@@ -58,24 +57,11 @@ class LeptokurticEnv(gym.Env):
 
         self.steps_beyond_done = None
 
-    def env_seed(self, seed=None):
+    def seed(self, seed=None):
         np.random.seed(seed)
 
     def step(self, action):
         assert self.action_space.contains(action), "%r (%s) invalid" % (action, type(action))
-
-        random_draw = np.random.uniform()
-
-        if self.state == "S0":
-            if random_draw <= self.state_transition_prob:
-                self.state = "S1"
-            else:
-                self.state = "S0"
-        else:
-            if random_draw <= self.state_transition_prob:
-                self.state = "S0"
-            else:
-                self.state = "S1"
 
         if self.reward_distribution_type == 'E':
             f = np.random.choice(self.reward_distribution)
@@ -84,16 +70,21 @@ class LeptokurticEnv(gym.Env):
         else:
             f = self.reward_distribution()
 
-        if self.state == "S1":
+        if self.state == "S0":
             if action == 0:
                 reward = f + self.true_mean["high"]
             else:
                 reward = f + self.true_mean["low"]
-        else:
+        elif self.state == "S1":
             if action == 0:
                 reward = f + self.true_mean["low"]
             else:
                 reward = f + self.true_mean["high"]
+
+        if self.state == "S0":
+            self.state = np.random.choice(["S0", "S1"], p=[0.7, 0.3])
+        elif self.state == "S1":
+            self.state = np.random.choice(["S0", "S1"], p=[0.3, 0.7])
 
         self.cum_reward += reward
 
