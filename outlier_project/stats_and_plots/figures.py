@@ -86,9 +86,9 @@ for i in ("S0", "S1"):
         font_style = {"fontweight": "bold", "fontsize": 14}
         # We can set the number of bins with the `bins` kwarg
         sns.distplot(raw["SARSA"][i][j], bins=50, kde=False, rug=True, ax=axs[0], color='#4ca84c',
-                     hist_kws={"alpha": 1}, rug_kws={"alpha": 0.2, 'color': 'black', 'height': '0.02'})
+                     hist_kws={"alpha": 1}, rug_kws={"alpha": 0.2, 'color': 'black', 'height': 0.02})
         sns.distplot(raw["EM_MLE"][i][j], bins=50, kde=False, rug=True, ax=axs[1], color='#4c4ca8',
-                     hist_kws={"alpha": 1}, rug_kws={"alpha": 0.2, 'color': 'black', 'height': '0.02'})
+                     hist_kws={"alpha": 1}, rug_kws={"alpha": 0.2, 'color': 'black', 'height': 0.02})
         axs[0].set_xlabel('TD Errors', font_style)
         axs[0].tick_params(labelsize=14)
         axs[1].tick_params(labelsize=14)
@@ -118,11 +118,11 @@ for i in ("S0", "S1"):
 
         # We can set the number of bins with the `bins` kwarg
         sns.distplot(raw["SARSA"][i][j], bins=50, kde=False, rug=True, ax=axs[0], color='#4ca84c',
-                     hist_kws={"alpha": 1}, rug_kws={"alpha": 0.2, 'color': 'black', 'height': '0.02'})
+                     hist_kws={"alpha": 1}, rug_kws={"alpha": 0.2, 'color': 'black', 'height': 0.02})
         sns.distplot(raw["sample_average"][i][j], bins=50, kde=False, rug=True, ax=axs[1], color='#c75c32',
-                     hist_kws={"alpha": 1}, rug_kws={"alpha": 0.2, 'color': 'black', 'height': '0.02'})
+                     hist_kws={"alpha": 1}, rug_kws={"alpha": 0.2, 'color': 'black', 'height': 0.02})
         sns.distplot(raw["EM_MLE"][i][j], bins=50, kde=False, rug=True, ax=axs[2], color='#4c4ca8',
-                     hist_kws={"alpha": 1}, rug_kws={"alpha": 0.2, 'color': 'black', 'height': '0.02'})
+                     hist_kws={"alpha": 1}, rug_kws={"alpha": 0.2, 'color': 'black', 'height': 0.02})
 
         axs[0].tick_params(labelsize=14)
         axs[1].tick_params(labelsize=14)
