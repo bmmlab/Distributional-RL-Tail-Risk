@@ -25,7 +25,7 @@ def main():
         for each_dist in experiment_distribution:
             env.reward_distribution_type = each_dist
 
-            env.env_seed(seed=seeds[each_sim])  # fix seed
+            env.seed(seed=seeds[each_sim])  # fix seed
             env.initialize_reward_distribution()
 
             # ---------------------------------SARSA-------------------------------------------------

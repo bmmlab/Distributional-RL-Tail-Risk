@@ -32,7 +32,7 @@ def efficient_estimates(reward_list, mu=None, sigma_square=None, df=None, method
     """
 
     if method == 'sample_average':
-        return np.average(reward_list)
+        return np.average(reward_list), None
 
     elif method == 'EM_MLE':  # Expectation Maximization algorithm
         if sigma_square is None:
@@ -44,12 +44,9 @@ def efficient_estimates(reward_list, mu=None, sigma_square=None, df=None, method
         x1 = (df + 1) * sigma_square
         x2 = df * sigma_square + np.square(np.array(reward_list) - mu)
         weights = np.divide(x1, x2)
-        estimates = np.sum(weights * reward_list) / np.sum(weights)
-        return estimates
-
-    elif method == 'exponential':
-        fitting_para = sts.expon.fit(-np.array(reward_list)[1:])
-        return -fitting_para[0]
+        mean = np.sum(weights * reward_list) / np.sum(weights)
+        variance = np.sum(weights * np.square(np.array(reward_list) - mean)) / len(reward_list)
+        return mean, variance
 
 
 def distributional_sarsa(env, c):
@@ -72,6 +69,7 @@ def distributional_sarsa(env, c):
 
     history = deque([])  # record data for statistical analysis
     reward_list = deque()
+    reward_estimates, variance = c.mu, c.variance
 
     for each_episode in range(0, c.total_episode):
         next_state = env.state
@@ -88,11 +86,11 @@ def distributional_sarsa(env, c):
 
             reward_dist[current_state][action_key].append(reward)  # add reward to reward list
 
-            reward_estimates = efficient_estimates(reward_list=reward_dist[current_state][action_key],
-                                                   mu=c.mu,
-                                                   sigma_square=c.variance,
-                                                   df=c.df,
-                                                   method=c.efficient_estimation_method)
+            reward_estimates, variance = efficient_estimates(reward_list=reward_dist[current_state][action_key],
+                                                             mu=reward_estimates,
+                                                             sigma_square=variance,
+                                                             df=c.df,
+                                                             method=c.efficient_estimation_method)
 
             q_value = q_table[current_state][action_key]
             q_value_next = q_table[next_state].max()
